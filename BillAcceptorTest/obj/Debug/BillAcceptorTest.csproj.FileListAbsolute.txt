@@ -1,0 +1,153 @@
+c:\users\nitika\documents\visual studio 2015\Projects\BillAcceptorTest\BillAcceptorTest\bin\Debug\BillAcceptorTest.exe.config
+c:\users\nitika\documents\visual studio 2015\Projects\BillAcceptorTest\BillAcceptorTest\bin\Debug\BillAcceptorTest.exe
+c:\users\nitika\documents\visual studio 2015\Projects\BillAcceptorTest\BillAcceptorTest\bin\Debug\BillAcceptorTest.pdb
+c:\users\nitika\documents\visual studio 2015\Projects\BillAcceptorTest\BillAcceptorTest\bin\Debug\log4net.dll
+c:\users\nitika\documents\visual studio 2015\Projects\BillAcceptorTest\BillAcceptorTest\bin\Debug\PyramidNETRS232.dll
+c:\users\nitika\documents\visual studio 2015\Projects\BillAcceptorTest\BillAcceptorTest\bin\Debug\log4net.xml
+c:\users\nitika\documents\visual studio 2015\Projects\BillAcceptorTest\BillAcceptorTest\bin\Debug\PyramidNETRS232.xml
+c:\users\nitika\documents\visual studio 2015\Projects\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.csprojResolveAssemblyReference.cache
+c:\users\nitika\documents\visual studio 2015\Projects\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.Form1.resources
+c:\users\nitika\documents\visual studio 2015\Projects\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.Form2.resources
+c:\users\nitika\documents\visual studio 2015\Projects\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.Properties.Resources.resources
+c:\users\nitika\documents\visual studio 2015\Projects\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.csproj.GenerateResource.Cache
+c:\users\nitika\documents\visual studio 2015\Projects\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.exe
+c:\users\nitika\documents\visual studio 2015\Projects\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.pdb
+C:\Users\1\Documents\BillAcceptorTest\BillAcceptorTest\bin\Debug\BillAcceptorTest.exe.config
+C:\Users\1\Documents\BillAcceptorTest\BillAcceptorTest\bin\Debug\BillAcceptorTest.exe
+C:\Users\1\Documents\BillAcceptorTest\BillAcceptorTest\bin\Debug\BillAcceptorTest.pdb
+C:\Users\1\Documents\BillAcceptorTest\BillAcceptorTest\bin\Debug\log4net.dll
+C:\Users\1\Documents\BillAcceptorTest\BillAcceptorTest\bin\Debug\PyramidNETRS232.dll
+C:\Users\1\Documents\BillAcceptorTest\BillAcceptorTest\bin\Debug\log4net.xml
+C:\Users\1\Documents\BillAcceptorTest\BillAcceptorTest\bin\Debug\PyramidNETRS232.xml
+C:\Users\1\Documents\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.csprojAssemblyReference.cache
+C:\Users\1\Documents\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.Form1.resources
+C:\Users\1\Documents\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.Form2.resources
+C:\Users\1\Documents\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.Properties.Resources.resources
+C:\Users\1\Documents\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.csproj.GenerateResource.cache
+C:\Users\1\Documents\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.csproj.CoreCompileInputs.cache
+C:\Users\1\Documents\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.csproj.CopyComplete
+C:\Users\1\Documents\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.exe
+C:\Users\1\Documents\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.pdb
+E:\Sunny Patel\GatorGames\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.Form1.resources
+E:\Sunny Patel\GatorGames\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.Form2.resources
+E:\Sunny Patel\GatorGames\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.Properties.Resources.resources
+E:\Sunny Patel\GatorGames\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.ShopLogin.resources
+E:\Sunny Patel\GatorGames\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.csproj.GenerateResource.Cache
+E:\Sunny Patel\GatorGames\BillAcceptorTest\BillAcceptorTest\bin\Debug\Properties\Settings.Designer.cs
+E:\Sunny Patel\GatorGames\BillAcceptorTest\BillAcceptorTest\bin\Debug\Properties\Settings.settings
+E:\Sunny Patel\GatorGames\BillAcceptorTest\BillAcceptorTest\bin\Debug\BillAcceptorTest.exe.config
+E:\Sunny Patel\GatorGames\BillAcceptorTest\BillAcceptorTest\bin\Debug\BillAcceptorTest.exe
+E:\Sunny Patel\GatorGames\BillAcceptorTest\BillAcceptorTest\bin\Debug\BillAcceptorTest.pdb
+E:\Sunny Patel\GatorGames\BillAcceptorTest\BillAcceptorTest\bin\Debug\log4net.dll
+E:\Sunny Patel\GatorGames\BillAcceptorTest\BillAcceptorTest\bin\Debug\PyramidNETRS232.dll
+E:\Sunny Patel\GatorGames\BillAcceptorTest\BillAcceptorTest\bin\Debug\log4net.xml
+E:\Sunny Patel\GatorGames\BillAcceptorTest\BillAcceptorTest\bin\Debug\PyramidNETRS232.xml
+E:\Sunny Patel\GatorGames\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.exe
+E:\Sunny Patel\GatorGames\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.pdb
+E:\Sunny Patel\GatorGames\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.csprojResolveAssemblyReference.cache
+C:\Users\1\Desktop\0329\BillAcceptorTest\BillAcceptorTest\bin\Debug\Properties\Settings.Designer.cs
+C:\Users\1\Desktop\0329\BillAcceptorTest\BillAcceptorTest\bin\Debug\Properties\Settings.settings
+C:\Users\1\Desktop\0329\BillAcceptorTest\BillAcceptorTest\bin\Debug\BillAcceptorTest.exe.config
+C:\Users\1\Desktop\0329\BillAcceptorTest\BillAcceptorTest\bin\Debug\BillAcceptorTest.exe
+C:\Users\1\Desktop\0329\BillAcceptorTest\BillAcceptorTest\bin\Debug\BillAcceptorTest.pdb
+C:\Users\1\Desktop\0329\BillAcceptorTest\BillAcceptorTest\bin\Debug\log4net.dll
+C:\Users\1\Desktop\0329\BillAcceptorTest\BillAcceptorTest\bin\Debug\PyramidNETRS232.dll
+C:\Users\1\Desktop\0329\BillAcceptorTest\BillAcceptorTest\bin\Debug\log4net.xml
+C:\Users\1\Desktop\0329\BillAcceptorTest\BillAcceptorTest\bin\Debug\PyramidNETRS232.xml
+C:\Users\1\Desktop\0329\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.csprojAssemblyReference.cache
+C:\Users\1\Desktop\0329\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.Form1.resources
+C:\Users\1\Desktop\0329\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.Form2.resources
+C:\Users\1\Desktop\0329\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.Properties.Resources.resources
+C:\Users\1\Desktop\0329\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.ShopLogin.resources
+C:\Users\1\Desktop\0329\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.csproj.GenerateResource.cache
+C:\Users\1\Desktop\0329\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.csproj.CoreCompileInputs.cache
+C:\Users\1\Desktop\0329\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.csproj.CopyComplete
+C:\Users\1\Desktop\0329\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.exe
+C:\Users\1\Desktop\0329\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.pdb
+C:\Users\1\Desktop\0329\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.enjoy.resources
+C:\Users\1\Desktop\0329\BillAcceptorTest\BillAcceptorTest\bin\Debug\BillAcceptorTest.exe.manifest
+C:\Users\1\Desktop\0329\BillAcceptorTest\BillAcceptorTest\bin\Debug\BillAcceptorTest.application
+C:\Users\1\Desktop\0329\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.exe.manifest
+C:\Users\1\Desktop\0329\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.application
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\Properties\Settings.Designer.cs
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\Properties\Settings.settings
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\BillAcceptorTest.exe.config
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\BillAcceptorTest.exe.manifest
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\BillAcceptorTest.application
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\BillAcceptorTest.exe
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\BillAcceptorTest.pdb
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\log4net.dll
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\PyramidNETRS232.dll
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\log4net.xml
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\PyramidNETRS232.xml
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.csprojAssemblyReference.cache
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.enjoy.resources
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.Form1.resources
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.Form2.resources
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.Properties.Resources.resources
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.ShopLogin.resources
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.csproj.GenerateResource.cache
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.csproj.CoreCompileInputs.cache
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.exe.manifest
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.application
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.csproj.CopyComplete
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.exe
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.pdb
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\DotSpatial.Positioning.Design.dll
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\DotSpatial.Positioning.dll
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\DotSpatial.Positioning.Forms.dll
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\DotSpatial.Positioning.xml
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\DotSpatial.Positioning.Design.xml
+C:\Users\1\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\DotSpatial.Positioning.Forms.xml
+C:\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.csprojAssemblyReference.cache
+C:\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.enjoy.resources
+C:\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.Form1.resources
+C:\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.Form2.resources
+C:\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.Properties.Resources.resources
+C:\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.ShopLogin.resources
+C:\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.csproj.GenerateResource.cache
+C:\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.exe
+C:\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.pdb
+C:\BillAcceptorTest\BillAcceptorTest\bin\Debug\Properties\Settings.Designer.cs
+C:\BillAcceptorTest\BillAcceptorTest\bin\Debug\Properties\Settings.settings
+C:\BillAcceptorTest\BillAcceptorTest\bin\Debug\BillAcceptorTest.exe.config
+C:\BillAcceptorTest\BillAcceptorTest\bin\Debug\BillAcceptorTest.exe.manifest
+C:\BillAcceptorTest\BillAcceptorTest\bin\Debug\BillAcceptorTest.application
+C:\BillAcceptorTest\BillAcceptorTest\bin\Debug\BillAcceptorTest.exe
+C:\BillAcceptorTest\BillAcceptorTest\bin\Debug\BillAcceptorTest.pdb
+C:\BillAcceptorTest\BillAcceptorTest\bin\Debug\log4net.dll
+C:\BillAcceptorTest\BillAcceptorTest\bin\Debug\PyramidNETRS232.dll
+C:\BillAcceptorTest\BillAcceptorTest\bin\Debug\DotSpatial.Positioning.xml
+C:\BillAcceptorTest\BillAcceptorTest\bin\Debug\DotSpatial.Positioning.Design.xml
+C:\BillAcceptorTest\BillAcceptorTest\bin\Debug\DotSpatial.Positioning.Forms.xml
+C:\BillAcceptorTest\BillAcceptorTest\bin\Debug\log4net.xml
+C:\BillAcceptorTest\BillAcceptorTest\bin\Debug\PyramidNETRS232.xml
+C:\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.csproj.CoreCompileInputs.cache
+C:\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.exe.manifest
+C:\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.application
+C:\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.csproj.CopyComplete
+C:\Users\Nitika\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\BillAcceptorTest.exe.config
+C:\Users\Nitika\Desktop\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.exe
+C:\Users\Nitika\Desktop\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.pdb
+C:\Users\Nitika\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\Properties\Settings.Designer.cs
+C:\Users\Nitika\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\Properties\Settings.settings
+C:\Users\Nitika\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\BillAcceptorTest.exe.manifest
+C:\Users\Nitika\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\BillAcceptorTest.application
+C:\Users\Nitika\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\BillAcceptorTest.exe
+C:\Users\Nitika\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\BillAcceptorTest.pdb
+C:\Users\Nitika\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\log4net.dll
+C:\Users\Nitika\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\PyramidNETRS232.dll
+C:\Users\Nitika\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\DotSpatial.Positioning.xml
+C:\Users\Nitika\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\DotSpatial.Positioning.Design.xml
+C:\Users\Nitika\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\DotSpatial.Positioning.Forms.xml
+C:\Users\Nitika\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\log4net.xml
+C:\Users\Nitika\Desktop\BillAcceptorTest\BillAcceptorTest\bin\Debug\PyramidNETRS232.xml
+C:\Users\Nitika\Desktop\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.csprojResolveAssemblyReference.cache
+C:\Users\Nitika\Desktop\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.enjoy.resources
+C:\Users\Nitika\Desktop\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.Form1.resources
+C:\Users\Nitika\Desktop\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.Form2.resources
+C:\Users\Nitika\Desktop\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.Properties.Resources.resources
+C:\Users\Nitika\Desktop\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.ShopLogin.resources
+C:\Users\Nitika\Desktop\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.csproj.GenerateResource.Cache
+C:\Users\Nitika\Desktop\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.exe.manifest
+C:\Users\Nitika\Desktop\BillAcceptorTest\BillAcceptorTest\obj\Debug\BillAcceptorTest.application

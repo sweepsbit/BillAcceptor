@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+    <configSections>
+        <sectionGroup name="userSettings" type="System.Configuration.UserSettingsGroup, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" >
+            <section name="BillAcceptorTest.Properties.Settings" type="System.Configuration.ClientSettingsSection, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" allowExeDefinition="MachineToLocalUser" requirePermission="false" />
+        </sectionGroup>
+    </configSections>
+    <startup> 
+        <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5.2" />
+    </startup>
+    <userSettings>
+        <BillAcceptorTest.Properties.Settings>
+            <setting name="ShopId" serializeAs="String">
+                <value>0</value>
+            </setting>
+            <setting name="ShopUserName" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="ShopPassword" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="CabinetId" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="MyIP" serializeAs="String">
+                <value />
+            </setting>
+        </BillAcceptorTest.Properties.Settings>
+    </userSettings>
+	<connectionStrings>
+		<add name="MyConnection"
+
+		connectionString="Data Source=54.146.37.99;Initial Catalog=GatorGames;Persist Security Info=True;User ID=sa;Password=GatorGames2020!;MultipleActiveResultSets=True;Connect Timeout=300;Pooling=false;"/>
+	</connectionStrings>
+</configuration>
