@@ -1,32 +1,30 @@
 ﻿using System;
-
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
 using PyramidNETRS232;
 using System.ComponentModel;
-//using Casino.Controllers;
-using System.Collections.Specialized;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Data;
-using System.Drawing;
 using System.Threading.Tasks;
 using BillAcceptorTest.Properties;
 using System.Configuration;
- 
+
 namespace BillAcceptorTest
 {
-
     public partial class Form2 : Form
     {
-        static string connectionString = ConfigurationManager.ConnectionStrings["MyConnection"].ConnectionString;
-        SqlConnection conn = new SqlConnection(connectionString);
+        private static readonly string ConnectionString =
+            ConfigurationManager.ConnectionStrings["MyConnection"].ConnectionString;
+
         private PyramidAcceptor validator;
         private RS232Config config;
-        private FixedObservableLinkedList<DebugBufferEntry> debugQueueMaster = new FixedObservableLinkedList<DebugBufferEntry>(20);
-        private FixedObservableLinkedList<DebugBufferEntry> debugQueueSlave = new FixedObservableLinkedList<DebugBufferEntry>(20);
+
+        private readonly FixedObservableLinkedList<DebugBufferEntry> debugQueueMaster =
+            new FixedObservableLinkedList<DebugBufferEntry>(20);
+
+        private readonly FixedObservableLinkedList<DebugBufferEntry> debugQueueSlave =
+            new FixedObservableLinkedList<DebugBufferEntry>(20);
+
         private int bill1 = 0;
         private int bill2 = 0;
         private int bill3 = 0;
@@ -36,71 +34,64 @@ namespace BillAcceptorTest
         private int bill7 = 0;
         private int total = 0;
 
-        private static Dictionary<int, int> currencyMap = new Dictionary<int, int>();
-        private Dictionary<int, long> cashbox = new Dictionary<int, long>();
-        static int totalDenomination = 0;
+        private const string PortName = "COM100";
 
-        DateTime sessionstarttime;
-        DateTime sessionendtime;
-        DateTime sessionresettime;
-        int CustomerID;
-        int ShopId;
-        decimal BillAmount;
-        decimal TotalDenomination;
+        private static readonly Dictionary<int, int> CurrencyMap = new Dictionary<int, int>
+        {
+            {1, 1},
+            {2, 2},
+            {3, 5},
+            {4, 10},
+            {5, 20},
+            {6, 50},
+            {7, 100}
+        };
+
+        private static int TotalDenomination = 0;
+
+        private readonly DateTime sessionStartTime;
+        private int customerId;
+        private int shopId;
+        private decimal amount;
+
         public Form2()
         {
             InitializeComponent();
-            sessionstarttime = DateTime.Now;
+            sessionStartTime = DateTime.Now;
+        }
+
+        private static async Task<SqlConnection> GetConnection()
+        {
+            var sqlConnection = new SqlConnection(ConnectionString);
+            await sqlConnection.OpenAsync();
+            return sqlConnection;
         }
 
         private void Form2_Load(object sender, EventArgs e)
         {
-            userid.Text = Properties.Settings.Default["ShopId"].ToString();//Form1.AShopID.ToString();
-            ShopId = Convert.ToInt32(Properties.Settings.Default["ShopId"]);
+            userid.Text = Settings.Default["ShopId"].ToString(); //Form1.AShopID.ToString();
+            shopId = Convert.ToInt32(Settings.Default["ShopId"]);
             //MessageBox.Show(userid.Text);
             timer2.Enabled = true;
             timer1.Enabled = true;
-            if (conn.State == ConnectionState.Closed)
-            {
-                conn.Open();
-            }
-            if (currencyMap.Count == 0)
-            {
-                currencyMap.Add(1, 1);
-                currencyMap.Add(2, 2);
-                currencyMap.Add(3, 5);
-                currencyMap.Add(4, 10);
-                currencyMap.Add(5, 20);
-                currencyMap.Add(6, 50);
-                currencyMap.Add(7, 100);
-            }
-          
+
             if (IsConnected)
             {
                 validator.Close();
-
                 return;
             }
-
-
-            string PortName = "COM100";
-            if (string.IsNullOrEmpty(PortName) || PortName.Equals("Select Port"))
-            {
-                Console.WriteLine("Please select a port");
-                return;
-            }
-
 
             IsConnected = true;
 
             config = new RS232Config(PortName, false);
             validator = new PyramidAcceptor(config);
-             
+
             validator.OnCredit += validator_OnCredit;
-            
+
             // This starts the acceptor - REQUIRED!!
             validator.Connect();
         }
+
         void config_OnSerialData(object sender, DebugEntryArgs e)
         {
             var entry = e.Entry;
@@ -109,54 +100,45 @@ namespace BillAcceptorTest
                 if (entry.Flow == Flows.Master)
                 {
                     debugQueueMaster.Add(entry);
- 
                 }
                 else
                 {
                     debugQueueSlave.Add(entry);
-
-                     
                 }
             });
         }
+
         private void DoOnUIThread(Action action)
         {
-
             action.Invoke();
-
         }
-        private bool _isConnected = false;
-        public bool IsConnected
+
+        private bool isConnected = false;
+
+        private bool IsConnected
         {
-            get { return _isConnected; }
+            get => isConnected;
             set
             {
-                _isConnected = value;
+                isConnected = value;
                 NotifyPropertyChanged("IsConnected");
                 NotifyPropertyChanged("IsNotConnected");
             }
         }
 
-        private void validator_OnCredit(object sender, CreditArgs e)
+        private async void validator_OnCredit(object sender, CreditArgs e)
         {
-            counter = 0;
+            _counter = 0;
             var denomination = e.Index;
-            if (currencyMap.ContainsKey(denomination))
-            {
-                if (denomination > 0)
-                {
-                    Console.WriteLine("Credited ${0}", AddCredit(denomination));
-                   
-                }
-                else
-                    Console.WriteLine("Failed to credit: {0}", denomination);
-            }
+            if (!CurrencyMap.TryGetValue(denomination, out _)) return;
 
+            var creditAdded = await AddCredit(denomination);
+            Console.WriteLine($"Credited {creditAdded}");
         }
-      
-        internal int AddCredit(int denom)
+
+        private async Task<int> AddCredit(int denomination)
         {
-            switch (denom)
+            switch (denomination)
             {
                 case 1:
                     Bill1++;
@@ -186,36 +168,48 @@ namespace BillAcceptorTest
             }
 
             // Return translated value and increment bill bank total
-            var val = currencyMap[denom];
-            totalDenomination += val;
-            BillAmount = val;
-            if (conn.State == ConnectionState.Closed)
-            {
-                conn.Open();
-            }
+            var val = CurrencyMap[denomination];
+            TotalDenomination += val;
+            amount = val;
             Total += val;
-            string str = "insert into CG_KioskLogs(ShopId,SessionStartTime,BillAmount,TotalAmount) values(" + ShopId + ",'" + sessionstarttime + "'," + BillAmount + "," + totalDenomination + ")";
-            SqlCommand cmd = new SqlCommand(str, conn);
-            cmd.ExecuteNonQuery();
-            string CabinetId = Settings.Default["CabinetId"].ToString();
-            str = "update CG_BillAcceptorOnOff set CurrentDenom=" + val + ",TotalDenom=TotalDenom+" + val + " where BillAcceptorIp='"+ CabinetId + "'";
-            cmd = new SqlCommand(str, conn);
-            cmd.ExecuteNonQuery();
-            str = "update CG_CabinetsLogsMapping set TotalIn=TotalIn+" + val + " where CabinetId='" + CabinetId + "'";
-            cmd = new SqlCommand(str, conn);
-            cmd.ExecuteNonQuery();
-            
-            str = "update CG_TempCabinetsLogsMapping set TotalIn=TotalIn+" + val + " where CabinetId='" + CabinetId + "'";
-            cmd = new SqlCommand(str, conn);
-            cmd.ExecuteNonQuery();
 
+            using (var conn = await GetConnection())
+            {
+                var str = "insert into CG_KioskLogs(ShopId,SessionStartTime,BillAmount,TotalAmount) values(" + shopId +
+                          ",'" + sessionStartTime + "'," + amount + "," + TotalDenomination + ")";
+
+                using (var cmd = new SqlCommand(str, conn))
+                    await cmd.ExecuteNonQueryAsync();
+
+                var cabinetId = Settings.Default["CabinetId"].ToString();
+
+                str = "update CG_BillAcceptorOnOff set CurrentDenom=" + val + ",TotalDenom=TotalDenom+" + val +
+                      " where BillAcceptorIp='" + cabinetId + "'";
+
+                using (var cmd = new SqlCommand(str, conn))
+                    await cmd.ExecuteNonQueryAsync();
+
+                str = "update CG_CabinetsLogsMapping set TotalIn=TotalIn+" + val + " where CabinetId='" + cabinetId +
+                      "'";
+                using (var cmd = new SqlCommand(str, conn))
+                    await cmd.ExecuteNonQueryAsync();
+
+                // CG_TempCabinetsLogsMapping
+                str = "update CG_TempCabinetsLogsMapping set TotalIn=TotalIn+" + val + " where CabinetId='" +
+                      cabinetId +
+                      "'";
+                using (var cmd = new SqlCommand(str, conn))
+                    await cmd.ExecuteNonQueryAsync();
+            }
 
             return val;
         }
+
         #region Properties
-        public int Bill1
+
+        private int Bill1
         {
-            get { return bill1; }
+            get => bill1;
             set
             {
                 bill1 = value;
@@ -223,9 +217,9 @@ namespace BillAcceptorTest
             }
         }
 
-        public int Bill2
+        private int Bill2
         {
-            get { return bill2; }
+            get => bill2;
             set
             {
                 bill2 = value;
@@ -233,9 +227,9 @@ namespace BillAcceptorTest
             }
         }
 
-        public int Bill3
+        private int Bill3
         {
-            get { return bill3; }
+            get => bill3;
             set
             {
                 bill3 = value;
@@ -243,9 +237,9 @@ namespace BillAcceptorTest
             }
         }
 
-        public int Bill4
+        private int Bill4
         {
-            get { return bill4; }
+            get => bill4;
             set
             {
                 bill4 = value;
@@ -253,9 +247,9 @@ namespace BillAcceptorTest
             }
         }
 
-        public int Bill5
+        private int Bill5
         {
-            get { return bill5; }
+            get => bill5;
             set
             {
                 bill5 = value;
@@ -263,9 +257,9 @@ namespace BillAcceptorTest
             }
         }
 
-        public int Bill6
+        private int Bill6
         {
-            get { return bill6; }
+            get => bill6;
             set
             {
                 bill6 = value;
@@ -273,9 +267,9 @@ namespace BillAcceptorTest
             }
         }
 
-        public int Bill7
+        private int Bill7
         {
-            get { return bill7; }
+            get => bill7;
             set
             {
                 bill7 = value;
@@ -285,342 +279,342 @@ namespace BillAcceptorTest
 
         public int Total
         {
-            get { return total; }
+            get => total;
             set
             {
                 total = value;
                 NotifyPropertyChanged("Total");
             }
         }
+
         #endregion
+
         #region Private Helpers
+
         #endregion
+
         #region INotifyPropertyChanged Members
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         public delegate void PropertyChangedEventHandler(object sender, PropertyChangedEventArgs e);
 
         #endregion
 
         private void NotifyPropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
-        internal class FixedObservableLinkedList<T> : LinkedList<T>, INotifyCollectionChanged
-        {
-            private readonly object syncObject = new object();
-
-            public int Size { get; private set; }
-
-            public FixedObservableLinkedList(int size)
-            {
-                Size = size;
-            }
-
-
-            public void Add(T obj)
-            {
-                AddFirst(obj);
-                lock (syncObject)
-                {
-                    while (Count > Size)
-                    {
-                        RemoveLast();
-                    }
-                }
-                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset, null));
-            }
-
-            public event NotifyCollectionChangedEventHandler CollectionChanged;
-            private void OnCollectionChanged(NotifyCollectionChangedEventArgs args)
-            {
-
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        
-        private void clear()
+        private void Clear()
         {
-            totalDenomination = 0;
+            TotalDenomination = 0;
             label1.Text = "0";
         }
-        public string RandomDigits(int length)
+
+        private static string RandomDigits(int length)
         {
             var random = new Random();
-            string s = string.Empty;
-            for (int i = 0; i < length; i++)
-                s = String.Concat(s, random.Next(10).ToString());
+            var s = string.Empty;
+            for (var i = 0; i < length; i++)
+                s = string.Concat(s, random.Next(10).ToString());
             return s;
         }
-        public string CreateNewCustomerTest(int InitialCredits, int ShopId)
-        {
-            counter = 0;
-            if (conn.State == ConnectionState.Closed)
-            {
-                conn.Open();
-            }
 
-            string message = string.Empty;
-            int CustId = 0;
+
+        /// <summary>
+        /// Creates Customer
+        /// </summary>
+        /// <param name="initialCredits"></param>
+        /// <param name="customerShopId"></param>
+        /// <param name="conn"></param>
+        /// <returns></returns>
+        private async Task<(bool success, int customerId, int initialCredits, DateTime time, string email, decimal rewardPoint)>
+            CreateNewCustomerTest(int initialCredits, int customerShopId, SqlConnection conn)
+        {
+            _counter = 0;
             try
             {
-                string randomNos = RandomDigits(10);
-                string Email = randomNos;
-                decimal CustomerTo = 0;
-                decimal CustomerBuyTo = 0;
-                decimal RewardPoint = 0;
-                int CreatedByShopId = ShopId;
-                string rsql = "select * from CG_ApplyPromotions where Status=1";
-                SqlDataAdapter dapt = new SqlDataAdapter(rsql, conn);
-                DataSet ds = new DataSet();
-                dapt.Fill(ds);
-                if (ds.Tables[0].Rows.Count > 0)
+                var randomNos = RandomDigits(10);
+                var email = randomNos;
+                decimal rewardPoint = 0;
+                var createdByShopId = customerShopId;
+                var rawSqlQuery = "select * from CG_ApplyPromotions where Status=1";
+                using (var dataAdapter = new SqlDataAdapter(rawSqlQuery, conn))
                 {
-                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    var ds = new DataSet();
+                    dataAdapter.Fill(ds);
+                    if (ds.Tables[0].Rows.Count > 0)
                     {
-                        CustomerTo = Convert.ToDecimal(ds.Tables[0].Rows[i]["CustomerBuy"]);
-                        CustomerBuyTo = Convert.ToDecimal(ds.Tables[0].Rows[i]["CutomerBuyTo"]);
-                        if (InitialCredits >= CustomerTo && InitialCredits <= CustomerBuyTo)
+                        for (var i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
-                            RewardPoint = Convert.ToDecimal(ds.Tables[0].Rows[i]["RewardsPoints"]);
+                            var customerTo = Convert.ToDecimal(ds.Tables[0].Rows[i]["CustomerBuy"]);
+                            var customerBuyTo = Convert.ToDecimal(ds.Tables[0].Rows[i]["CutomerBuyTo"]);
+                            if (initialCredits >= customerTo && initialCredits <= customerBuyTo)
+                            {
+                                rewardPoint = Convert.ToDecimal(ds.Tables[0].Rows[i]["RewardsPoints"]);
+                            }
                         }
                     }
                 }
-               
-                string sql = "insert into CG_Customer(Email,CreatedByShopId,Enabled,Locked,InitialCredits,IsCompleted,DashboardStatus,RewardsPoints,Gender,LoginStatus,CreatedDateTime) values";  // after Locked CreatedDateTime
-                sql += " ('" + Email + "'," + CreatedByShopId + ",1,0," + InitialCredits + ",1,0," + RewardPoint + ",1,'IN','" + DateTime.Now + "')"; // after 0,'" + DateTime.Now + "'
+
+                var sql = "insert into CG_Customer(Email,CreatedByShopId,Enabled,Locked,InitialCredits,IsCompleted,DashboardStatus,RewardsPoints,Gender,LoginStatus,CreatedDateTime) values"; // after Locked CreatedDateTime
+                sql += " ('" + email + "'," + createdByShopId + ",1,0," + initialCredits + ",1,0," + rewardPoint +
+                       ",1,'IN','" + DateTime.Now + "')"; // after 0,'" + DateTime.Now + "'
 
 
-                SqlCommand cmd = new SqlCommand(sql, conn);
-                
-                CustId = (int)cmd.ExecuteNonQuery();
+                int custId;
+                using (var cmd = new SqlCommand(sql, conn))
+                    custId = await cmd.ExecuteNonQueryAsync();
 
-                if (CustId > 0)
+                if (custId > 0)
                 {
-                    rsql = "update CG_ShopInOutReport set KioskIn=KioskIn +" + InitialCredits + " where ShopId=" + ShopId + "";
-                    SqlCommand cmdcc = new SqlCommand(rsql, conn);
-                    cmdcc.ExecuteNonQueryAsync();
-                    rsql = "update CG_ShopCurrentCredit set Credits=Credits +" + InitialCredits + " where ShopId=" + ShopId + "";
-                    cmdcc = new SqlCommand(rsql, conn);
-                    cmdcc.ExecuteNonQueryAsync();
-                    rsql = "select DistriutorId from CG_Shop where Id=" + ShopId + "";
-                    cmdcc = new SqlCommand(rsql, conn);
-                    int DistId = Convert.ToInt32(cmdcc.ExecuteScalarAsync());
-                    rsql = "update CG_Shop set UserLimit=UserLimit+1 where Id=" + ShopId + "";
-                    cmd = new SqlCommand(rsql, conn);
-                    cmd.ExecuteNonQueryAsync();
-                    rsql = "update CG_DistributorCurrentCredit set Credits=Credits +" + InitialCredits + " where DistributorId=" + DistId + "";
-                    cmdcc = new SqlCommand(rsql, conn);
-                    cmdcc.ExecuteNonQueryAsync();
+                    rawSqlQuery = "update CG_ShopInOutReport set KioskIn=KioskIn +" + initialCredits +
+                                  " where ShopId=" +
+                                  customerShopId + "";
+                    using (var cmdcc = new SqlCommand(rawSqlQuery, conn))
+                        await cmdcc.ExecuteNonQueryAsync();
 
-                    rsql = "update CG_EmployeeInOutReport set KioskIn=KioskIn +" + InitialCredits + " where ShopId=" + ShopId + "";
-                    cmdcc = new SqlCommand(rsql, conn);
-                    cmdcc.ExecuteNonQueryAsync();
-                    rsql = "update CG_ShopStatus set Kiosk=Kiosk +" + InitialCredits + " where ShopId=" + ShopId + "";
-                    cmdcc = new SqlCommand(rsql, conn);
-                    cmdcc.ExecuteNonQueryAsync();
-                    rsql = "update CG_EmployeeStatus set Kiosk=Kiosk +" + InitialCredits + " where ShopId=" + ShopId + "";
-                    cmdcc = new SqlCommand(rsql, conn);
-                    cmdcc.ExecuteNonQueryAsync();
+                    rawSqlQuery = "update CG_ShopCurrentCredit set Credits=Credits +" + initialCredits +
+                                  " where ShopId=" +
+                                  customerShopId + "";
+
+                    using (var cmdcc = new SqlCommand(rawSqlQuery, conn))
+                        await cmdcc.ExecuteNonQueryAsync();
+
+                    rawSqlQuery = "select DistriutorId from CG_Shop where Id=" + customerShopId + "";
+                    using (var cmdcc = new SqlCommand(rawSqlQuery, conn))
+                    {
+                        var distId = Convert.ToInt32(await cmdcc.ExecuteScalarAsync());
+                        rawSqlQuery = "update CG_Shop set UserLimit=UserLimit+1 where Id=" + customerShopId + "";
+                        using (var cmd = new SqlCommand(rawSqlQuery, conn))
+                        {
+                            await cmd.ExecuteNonQueryAsync();
+                            rawSqlQuery = "update CG_DistributorCurrentCredit set Credits=Credits +" + initialCredits +
+                                          " where DistributorId=" + distId + "";
+                        }
+
+                        using (var updateDistributorCurrentCredit = new SqlCommand(rawSqlQuery, conn))
+                            await updateDistributorCurrentCredit.ExecuteNonQueryAsync();
+                    }
+
+
+                    rawSqlQuery = "update CG_EmployeeInOutReport set KioskIn=KioskIn +" + initialCredits +
+                                  " where ShopId=" +
+                                  customerShopId + "";
+
+                    using (var cmdcc = new SqlCommand(rawSqlQuery, conn))
+                        await cmdcc.ExecuteNonQueryAsync();
+
+                    rawSqlQuery = "update CG_ShopStatus set Kiosk=Kiosk +" + initialCredits + " where ShopId=" +
+                                  customerShopId + "";
+                    using (var cmdcc = new SqlCommand(rawSqlQuery, conn))
+                        await cmdcc.ExecuteNonQueryAsync();
+
+                    rawSqlQuery = "update CG_EmployeeStatus set Kiosk=Kiosk +" + initialCredits + " where ShopId=" +
+                                  customerShopId +
+                                  "";
+                    using (var cmdcc = new SqlCommand(rawSqlQuery, conn))
+                        await cmdcc.ExecuteNonQueryAsync();
 
                     sql = "select max(Id) from CG_Customer";
-                    cmd = new SqlCommand(sql, conn);
-                    CustId = (int)cmd.ExecuteScalar();
-                    sql = "insert into CG_CustomerDashboard(CustomerId,CurrentBalance,CreditsEarned,CreditsPayout,Profit,TerminalId,WinAmount,CreatedByShopId)";
-                    sql += " values(" + CustId + "," + InitialCredits + "," + InitialCredits + ",0,0,0,0," + CreatedByShopId + ")";
-                    cmd = new SqlCommand(sql, conn);
-                    cmd.ExecuteNonQueryAsync();
+                    using (var cmd = new SqlCommand(sql, conn))
+                        custId = (int)await cmd.ExecuteScalarAsync();
 
-                    sql = "insert into CG_CustomerCreditHistory(CustomerId,TerminalId,CurrentCredits,Payouts,Profit,Loss,GameId,CreatedDate)";//CreatedDate,
-                    sql += " values(" + CustId + ",0," + InitialCredits + ",0,0,0,0,'" + DateTime.Now + "')"; //'" + DateTime.Now + "'
-                    cmd = new SqlCommand(sql, conn);
-                    cmd.ExecuteNonQueryAsync();
+                    sql =
+                        "insert into CG_CustomerDashboard(CustomerId,CurrentBalance,CreditsEarned,CreditsPayout,Profit,TerminalId,WinAmount,CreatedByShopId)";
+                    sql += " values(" + custId + "," + initialCredits + "," + initialCredits + ",0,0,0,0," +
+                           createdByShopId + ")";
 
-                    sql = "insert into CG_CustomerCurrentCredit(CustomerId,TerminalId,CreditsEarned,CurrentBalance,CreditsPayout,Profit,WinAmount,CurrentDateTime)"; //,CurrentDateTime
-                    sql += " values(" + CustId + ",0," + InitialCredits + "," + InitialCredits + ",0,0,0,'" + DateTime.Now + "')"; //,'" + DateTime.Now + "'
-                    cmd = new SqlCommand(sql, conn);
-                    cmd.ExecuteNonQueryAsync();
+                    using (var cmd = new SqlCommand(sql, conn))
+                        await cmd.ExecuteNonQueryAsync();
 
-                    sql = "insert into CG_ShopCreditHistory(ShopId,CreditsEarned,CreditsEarnedFromDistributorId,CreditsLoaned,CreditsLoanedToCustomerId,Currency,CurrentDateTime)"; //,CurrentDateTime
-                    sql += " values(" + CreatedByShopId + ",0,0," + InitialCredits + "," + CustId + ",'USD','" + DateTime.Now + "')"; //,'" + DateTime.Now + "'
-                    cmd = new SqlCommand(sql, conn);
-                    cmd.ExecuteNonQueryAsync();
-                    string CabinetId = Settings.Default["CabinetId"].ToString();
-                    sql = "insert into CG_CabinetCustomerMapping(CabinetId,CustomerId,CreateDatetime) values('"+ CabinetId + "','"+ CustId + "','" + DateTime.Now + "')";
-                    cmd = new SqlCommand(sql, conn);
-                    cmd.ExecuteNonQueryAsync();
-                    sql = "update CG_BillAcceptorOnOff set IsOn = 0,CurrentDenom = 0,IsCreateCustomer = 0 where BillAcceptorIp = '"+ CabinetId +"'";
+                    sql =
+                        "insert into CG_CustomerCreditHistory(CustomerId,TerminalId,CurrentCredits,Payouts,Profit,Loss,GameId,CreatedDate)"; //CreatedDate,
+                    sql += " values(" + custId + ",0," + initialCredits + ",0,0,0,0,'" + DateTime.Now +
+                           "')"; //'" + DateTime.Now + "'
 
-                    cmd = new SqlCommand(sql, conn);
-                    cmd.ExecuteNonQueryAsync();
+                    using (var cmd = new SqlCommand(sql, conn))
+                        await cmd.ExecuteNonQueryAsync();
+
+                    sql =
+                        "insert into CG_CustomerCurrentCredit(CustomerId,TerminalId,CreditsEarned,CurrentBalance,CreditsPayout,Profit,WinAmount,CurrentDateTime)"; //,CurrentDateTime
+                    sql += " values(" + custId + ",0," + initialCredits + "," + initialCredits + ",0,0,0,'" +
+                           DateTime.Now + "')"; //,'" + DateTime.Now + "'
+                    using (var cmd = new SqlCommand(sql, conn))
+                        await cmd.ExecuteNonQueryAsync();
+
+                    sql =
+                        "insert into CG_ShopCreditHistory(ShopId,CreditsEarned,CreditsEarnedFromDistributorId,CreditsLoaned,CreditsLoanedToCustomerId,Currency,CurrentDateTime)"; //,CurrentDateTime
+                    sql += " values(" + createdByShopId + ",0,0," + initialCredits + "," + custId + ",'USD','" +
+                           DateTime.Now + "')"; //,'" + DateTime.Now + "'
+                    using (var cmd = new SqlCommand(sql, conn))
+                        await cmd.ExecuteNonQueryAsync();
+
+                    var cabinetId = Settings.Default["CabinetId"].ToString();
+                    sql = "insert into CG_CabinetCustomerMapping(CabinetId,CustomerId,CreateDatetime) values('" +
+                          cabinetId + "','" + custId + "','" + DateTime.Now + "')";
+                    using (var cmd = new SqlCommand(sql, conn))
+                        await cmd.ExecuteNonQueryAsync();
+
+                    sql =
+                        "update CG_BillAcceptorOnOff set IsOn = 0,CurrentDenom = 0,IsCreateCustomer = 0 where BillAcceptorIp = '" +
+                        cabinetId + "'";
+
+                    using (var cmd = new SqlCommand(sql, conn))
+                        await cmd.ExecuteNonQueryAsync();
                 }
-                conn.Close();
-                //_shopServices.UpdateShopCurrentBalnce(model.CreditsIN, 2);
 
-                //      _shopServices.UpdateShopUserLimit(1, 2);
                 validator.Close();
-                message = "Ok," + CustId + "," + InitialCredits + "," + DateTime.Now + "," + Email + "," + RewardPoint;
-                return message;
-
+                return (true, custId, initialCredits, DateTime.Now, email, rewardPoint);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //var allErrors = ModelState.Values.SelectMany(v => v.Errors);
-
+                return (false, default, default, default, default, default);
             }
-            return "Success,";
         }
-        private void timer1_Tick(object sender, EventArgs e)
+
+        private async void timer1_Tick(object sender, EventArgs e)
         {
-            label1.Text = "$" + totalDenomination.ToString();
-            if (totalDenomination == 0)
-            {
-                //button1.Visible = false;
-            }
-            else
-            {
-               // button1.Visible = true;
-            }
-            string CabinetId = Settings.Default["CabinetId"].ToString();
-            string myIP = Settings.Default["MyIP"].ToString();
+            label1.Text = TotalDenomination.ToString();
 
-            string ss = "select * from CG_BillAcceptorOnOff where BillAcceptorIp='" + CabinetId + "' and IsCreateCustomer=1";
-            SqlDataAdapter dapt = new SqlDataAdapter(ss, conn);
-            DataSet ds = new DataSet();
-            dapt.Fill(ds);
-            int Ise = 1;
-            if (ds.Tables[0].Rows.Count > 0)
+            var cabinetId = Settings.Default["CabinetId"].ToString();
+
+            var ss = "select * from CG_BillAcceptorOnOff where BillAcceptorIp='" + cabinetId +
+                     "' and IsCreateCustomer=1";
+
+            using (var conn = await GetConnection())
             {
-                Ise = Convert.ToInt32(ds.Tables[0].Rows[0]["IsOn"]);
-                if (Ise == 0)
+                using (var dataAdapter = new SqlDataAdapter(ss, conn))
                 {
-
-
-                    counter = 0;
-                    string denomi = label1.Text.Substring(1);
-                    int CreditsIn = Convert.ToInt32(denomi);
-                    if (CreditsIn > 0)
+                    var ds = new DataSet();
+                    dataAdapter.Fill(ds);
+                    if (ds.Tables[0].Rows.Count > 0)
                     {
-
-                        int ShopId = Convert.ToInt32(userid.Text);
-                        string Result = CreateNewCustomerTest(CreditsIn, ShopId);
-                        string[] res = Result.Split(',');
-                        string FinalCredits = res[2];
-                        string CustomerId = res[4];
-                        string CreatedDateTime = res[3];
-                        string Rewardpoint = res[5];
-
-                        Ticket tkt = new Ticket();
-                        tkt.TicketNo = CustomerId;
-                        tkt.ticketDate = DateTime.Now;
-
-                        tkt.amount = int.Parse(FinalCredits);
-                        tkt.RewardPoint = int.Parse(Rewardpoint);
-                        if (conn.State == ConnectionState.Closed)
+                        var ise = Convert.ToInt32(ds.Tables[0].Rows[0]["IsOn"]);
+                        if (ise == 0)
                         {
-                            conn.Open();
+                            _counter = 0;
+                            var denomination = label1.Text.Substring(1);
+                            var creditsIn = int.Parse(denomination);
+                            if (creditsIn > 0)
+                            {
+                                var customerShopId = Convert.ToInt32(userid.Text);
+
+                                var (success, custId, initialCredits, dateTime, _, rewardPoint) =
+                                    await CreateNewCustomerTest(creditsIn, customerShopId, conn);
+
+                                if (!success)
+                                {
+                                    //Todo: Display some error message
+                                    return;
+                                }
+
+                                var tkt = new Ticket(custId.ToString(), dateTime, initialCredits, rewardPoint);
+
+                                var sql =
+                                    "insert into CG_KioskLogs(ShopId,SessionStartTime,BillAmount,TotalAmount,SessionEndTime,CustomerID,SessionResetTime,CabinetId,CabinetIn)";
+                                sql += " values(" + customerShopId + ",'" + sessionStartTime + "',0," + creditsIn +
+                                       ",'" +
+                                       DateTime.Now + "','" + customerId + "','" + DateTime.Now + "','" + cabinetId +
+                                       "'," +
+                                       creditsIn + ")";
+
+                                using (var cmd = new SqlCommand(sql, conn))
+                                    await cmd.ExecuteNonQueryAsync();
+
+                                sql = "update CG_ShopInOutReport set KioskIn = KioskIn+" + creditsIn +
+                                      ",CabinetIn=CabinetIn+" + creditsIn + " where ShopId=" + customerShopId + "";
+                                using (var cmd = new SqlCommand(sql, conn))
+                                    await cmd.ExecuteNonQueryAsync();
+
+                                //CG_EmployeeInOutReport
+                                sql = "update CG_EmployeeInOutReport set KioskIn = KioskIn+" + creditsIn +
+                                      ",CabinetIn=CabinetIn+" + creditsIn + " where ShopId=" + customerShopId + "";
+                                using (var cmd = new SqlCommand(sql, conn))
+                                    await cmd.ExecuteNonQueryAsync();
+
+                                sql =
+                                    "insert into CG_CabinetsCustomerPerActionLogs(CabinetId,CustomerId,Timestamps,InsertCredit) values('" +
+                                    cabinetId + "','" + customerId + "','" + DateTime.Now + "'," + creditsIn + ")";
+                                using (var cmd = new SqlCommand(sql, conn))
+                                    await cmd.ExecuteNonQueryAsync();
+
+                                tkt.Print();
+
+                                validator.Close();
+                                timer1.Enabled = false;
+                                timer2.Enabled = false;
+                                Clear();
+                                Hide();
+                                ShowInTaskbar = false;
+                                using (var frm1 = new enjoy())
+                                {
+                                    Close();
+                                    Dispose();
+                                    frm1.ShowDialog();
+                                }
+                            }
+
+                            TotalDenomination = 0;
                         }
-                        TotalDenomination = CreditsIn;
-                        string sql = "insert into CG_KioskLogs(ShopId,SessionStartTime,BillAmount,TotalAmount,SessionEndTime,CustomerID,SessionResetTime,CabinetId,CabinetIn)";
-                        sql += " values(" + ShopId + ",'" + sessionstarttime + "',0," + CreditsIn + ",'" + DateTime.Now + "','" + CustomerId + "','" + DateTime.Now + "','"+ CabinetId +"',"+ CreditsIn +")";
-                        SqlCommand cmd = new SqlCommand(sql, conn);
-                        cmd.ExecuteNonQueryAsync();
-                        sql = "update CG_ShopInOutReport set KioskIn = KioskIn+" + CreditsIn + ",CabinetIn=CabinetIn+"+  CreditsIn +" where ShopId=" + ShopId + "";
-                        cmd = new SqlCommand(sql, conn);
-                        cmd.ExecuteNonQueryAsync();
-                        //CG_EmployeeInOutReport
-                        sql = "update CG_EmployeeInOutReport set KioskIn = KioskIn+" + CreditsIn + ",CabinetIn=CabinetIn+" + CreditsIn + " where ShopId=" + ShopId + "";
-                        cmd = new SqlCommand(sql, conn);
-                        cmd.ExecuteNonQueryAsync();
-                        sql = "insert into CG_CabinetsCustomerPerActionLogs(CabinetId,CustomerId,Timestamps,InsertCredit) values('" + CabinetId + "','" + CustomerId + "','" + DateTime.Now + "'," + CreditsIn + ")";
-                        cmd = new SqlCommand(sql, conn);
-                        cmd.ExecuteNonQueryAsync();
-                        tkt.print();
-                        // MessageBox.Show("Ticket Printed Successfully");
+                    }
+                }
 
+                ss = "select * from CG_BillAcceptorOnOff where BillAcceptorIp='" + cabinetId +
+                     "' and IsOn=0 and  IsCreateCustomer=0";
 
+                using (var dataAdapter = new SqlDataAdapter(ss, conn))
+                {
+                    var ds = new DataSet();
+                    dataAdapter.Fill(ds);
+
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
                         validator.Close();
+                        Clear();
+                        Hide();
+                        Close();
                         timer1.Enabled = false;
                         timer2.Enabled = false;
-                        clear();
-                        this.Hide();
-                        this.ShowInTaskbar = false;
-                        enjoy frm1 = new enjoy();
-                        this.Close();
-                        this.Dispose();
-                        frm1.ShowDialog();
-                       // this.Dispose();
-
+                        ShowInTaskbar = false;
+                        using (var frm1 = new Form1())
+                        {
+                            frm1.ShowDialog();
+                            Dispose();
+                        }
                     }
-
-                    totalDenomination = 0;
-
                 }
             }
-            ss = "select * from CG_BillAcceptorOnOff where BillAcceptorIp='" + CabinetId + "' and IsOn=0 and  IsCreateCustomer=0";
-            dapt = new SqlDataAdapter(ss, conn);
-            ds = new DataSet();
-            dapt.Fill(ds);
-             
-            if (ds.Tables[0].Rows.Count > 0)
-            {
-
-                validator.Close();
-                clear();
-                this.Hide();
-                this.Close();
-                timer1.Enabled = false;
-                timer2.Enabled = false;
-                this.ShowInTaskbar = false;
-                Form1 frm1 = new Form1();
-                this.Dispose();
-                frm1.ShowDialog();
-                //this.Dispose();
-
-
-
-            }
         }
-        public string LabelText
-        {
-            get
-            {
-                return this.userid.Text;
-            }
-            set
-            {
-                this.userid.Text = value;
-            }
-        }
-        public static int counter = 0;
+
+        private static int _counter = 0;
+
         private void timer2_Tick(object sender, EventArgs e)
         {
-            counter++;
-            if (counter == 120 && totalDenomination == 0)
-            {
-                //validator.Close();
-                //Form1 frm1 = new Form1();
-                //this.Hide(); counter = 0;
-                //timer2.Enabled = false;
-                //frm1.Show();
+            _counter++;
+            if (_counter != 120 || TotalDenomination != 0) return;
 
-               
-                validator.Close();
+            validator.Close();
 
-                this.Hide();
-                this.Close();
-                counter = 0;
-                timer2.Enabled = false;
-                this.ShowInTaskbar = false;
-                Form1 frm1 = new Form1();
-                this.Dispose();
-                frm1.ShowDialog();
-               
-               // this.Dispose();
-            }
+            Hide();
+            Close();
+            _counter = 0;
+            timer2.Enabled = false;
+            ShowInTaskbar = false;
+            var frm1 = new Form1();
+            Dispose();
+            frm1.ShowDialog();
+
+            // this.Dispose();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            // Used before
+            //Now customer gets created from Time_Tick
+            throw new NotImplementedException();
         }
     }
 }

@@ -19,25 +19,27 @@ namespace BillAcceptorTest
 
         private void enjoy_Load(object sender, EventArgs e)
         {
-            
+
         }
-        public static int ctr=0;
+
+        private static int _ctr = 0;
         private void timer1_Tick(object sender, EventArgs e)
         {
-            ctr++;
-            if (ctr >= 5)
+            _ctr++;
+            if (_ctr >= 5)
             {
-                ctr = 0;
+                _ctr = 0;
                 timer1.Enabled = false;
                 timer1.Stop();
-               
-                this.Hide();
-                this.ShowInTaskbar = false;
-                Form1 frm1 = new Form1();
-                this.Close();
-                this.Dispose();
-                frm1.ShowDialog();
-                //this.Dispose();
+
+                Hide();
+                ShowInTaskbar = false;
+                using (var frm1 = new Form1())
+                {
+                    Close();
+                    Dispose();
+                    frm1.ShowDialog();
+                }
             }
         }
     }
