@@ -334,7 +334,7 @@ namespace BillAcceptorTest
         {
             _counter = 0;
             try
-            {
+            {   
                 var randomNos = RandomDigits(10);
                 var email = randomNos;
                 decimal rewardPoint = 0;
