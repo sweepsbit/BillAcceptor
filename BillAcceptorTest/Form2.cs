@@ -477,7 +477,7 @@ namespace BillAcceptorTest
 
         private async void timer1_Tick(object sender, EventArgs e)
         {
-            label1.Text = TotalDenomination.ToString();
+            label1.Text = "$" + TotalDenomination.ToString();
 
             var cabinetId = Settings.Default["CabinetId"].ToString();
 
@@ -496,8 +496,7 @@ namespace BillAcceptorTest
                         if (ise == 0)
                         {
                             _counter = 0;
-                            var denomination = label1.Text.Substring(1);
-                            var creditsIn = int.Parse(denomination);
+                            var creditsIn = TotalDenomination;
                             if (creditsIn > 0)
                             {
                                 var customerShopId = Convert.ToInt32(userid.Text);
@@ -613,7 +612,7 @@ namespace BillAcceptorTest
         private void button1_Click(object sender, EventArgs e)
         {
             // Used before
-            //Now customer gets created from Time_Tick
+            //Now customer gets created from Timer1_Tick
             throw new NotImplementedException();
         }
     }
